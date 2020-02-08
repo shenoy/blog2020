@@ -22,17 +22,21 @@ class PostsShow extends React.Component {
       return <div>...Loading</div>;
     }
     return (
-      <div>
-        <Link to="/">Index</Link>
+      <div className="ui container">
+        <Link to="/">
+          <h3>Back to Index</h3>
+        </Link>
         <button
-          className="btn btn-danger pull-xs-right"
+          className="ui button red right floated content"
           onClick={this.onDeleteClick.bind(this)}
         >
           Delete
         </button>
-        <h3>{post.title}</h3>
-        <h6>Categories:{post.categories}</h6>
-        <p>{post.content}</p>
+        <h1>{post.title}</h1>
+
+        <font size="5">
+          <p>{post.content}</p>
+        </font>
       </div>
     );
   }

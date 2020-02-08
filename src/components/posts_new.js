@@ -1,68 +1,71 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, SubmissionError } from "redux-form";
 import { createPost } from "../actions";
 import { connect } from "react-redux";
+import { Input, Button, Message } from "semantic-ui-react";
 
-class PostsNew extends React.Component {
+class PostsNew extends Component {
   renderField(field) {
     const {
-      meta: { touched, error }
+      input,
+      meta: { touched, error },
+      ...custom
     } = field;
-    const className = `form-group ${touched && error ? "has-danger" : ""} `;
+    const hasError = touched && error !== undefined;
     return (
-      <div className={className}>
+      <div>
         <label>{field.label}</label>
-        <input className="form-control" type="text" {...field.input} />
-        <div className="text-help">{touched ? error : ""}</div>
+        {hasError && <Message error header="error" content={error} />}
+        <Input
+          error={hasError}
+          fluid
+          placeholder={field.name}
+          {...input}
+          {...custom}
+        />
       </div>
     );
   }
 
-  onSubmit(values) {
+  submit = values => {
     this.props.createPost(values, () => {
       this.props.history.push("/");
     });
-  }
+  };
 
   render() {
     const { handleSubmit } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <form
+        className="ui container"
+        onSubmit={handleSubmit(this.submit.bind(this))}
+      >
         <Field name="title" label="title" component={this.renderField} />
-        <Field
-          name="categories"
-          label="categories"
-          component={this.renderField}
-        />
+
         <Field name="content" label="content" component={this.renderField} />
-        <button className="btn btn-primary">Submit</button>
-        <Link to="/" className="btn btn-danger">
-          Cancel
-        </Link>
+        <br />
+
+        <Button type="submit">Submit</Button>
       </form>
     );
   }
 }
+
 const validate = values => {
+  const { title, content } = values;
   const errors = {};
-
-  if (!values.title) {
-    errors.title = "please enter a title";
-  }
-
-  if (!values.categories) {
-    errors.categories = "please enter a category";
+  if (!values.title || values.title.trim() === "") {
+    errors.title = "title required";
   }
 
   if (!values.content) {
     errors.content = "please enter some content";
   }
-
   return errors;
 };
 
 export default reduxForm({
-  validate,
-  form: "PostsNewForm"
+  form: "PostsNewform",
+  validate
 })(connect(null, { createPost })(PostsNew));

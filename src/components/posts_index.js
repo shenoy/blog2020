@@ -12,23 +12,27 @@ class PostsIndex extends React.Component {
   renderPosts = () => {
     return _.map(this.props.posts, post => {
       return (
-        <li className="list-group-item" key={post.id}>
-          <Link to={`/posts/${post.id}`}>{post.title}</Link>
-        </li>
+        <div key={post.id} className="ui celled list">
+          <li>
+            <Link to={`/posts/${post.id}`}>{post.title}</Link>
+          </li>
+        </div>
       );
     });
   };
 
   render() {
     return (
-      <div>
+      <div className="ui container">
         <div className="text-xs-right">
           <Link className="btn btn-primary" to="/posts/new">
-            Add a post
+            <h3>Add a post</h3>
           </Link>
         </div>
-        <h3>Posts</h3>
-        <ul className="list-group">{this.renderPosts()}</ul>
+        <h2>Posts</h2>
+        <ul>
+          <h3>{this.renderPosts()}</h3>
+        </ul>
       </div>
     );
   }

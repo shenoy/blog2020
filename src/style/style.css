@@ -1,3 +1,7 @@
 form a {
   margin-left: 20px;
 }
+
+.large.text {
+  font-size: 10rem;
+}
